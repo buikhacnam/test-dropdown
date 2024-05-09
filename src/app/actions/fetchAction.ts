@@ -1,6 +1,6 @@
 "use server";
 const apiUrl = process.env.API_URL;
-const apiKey = process.env.API_KEY || '';
+const apiKey = process.env.API_KEY || "";
 import { HttpMethod } from "@/constants/HttpMethod";
 
 export async function fetchAction(
@@ -13,18 +13,32 @@ export async function fetchAction(
       method: method,
       headers: {
         "Content-Type": "application/json",
-        "X-API-Key": apiKey
+        "X-API-Key": apiKey,
       },
       body: JSON.stringify(body),
     });
-    let data = [];
-    try {
-      data = (await response.json()) || [];
-    } catch (error) {
+
+    let resObj = {
+      data: [],
+      error: "",
+    };
+
+    if (!response.ok) {
+      resObj.error = "Error fetching data: " + response.statusText;
+      return resObj;
     }
-   
-    return data;
+
+    try {
+      const dataRes = (await response.json()) || [];
+      resObj.data = dataRes;
+    } catch (error) {}
+
+    return resObj;
   } catch (error) {
     console.error("fetchAction error: ", error);
+    return {
+      data: [],
+      error: 'Error fetching data'
+    };
   }
 }

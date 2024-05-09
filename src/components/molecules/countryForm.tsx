@@ -7,29 +7,35 @@ import { Item, SelectScrollable } from "../ui/selectScrollable";
 import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
 
-export default function CountryForm() {
+interface CountryFormProps {
+  countries: Item[];
+  error?: string;
+}
+
+export default function CountryForm({ countries, error }: CountryFormProps) {
   const { toast } = useToast();
 
-  const [countries, setCountries] = useState<Item[]>([]);
   const [states, setStates] = useState<Item[]>([]);
   const [countryId, setCountryId] = useState<number | null>(null);
   const [stateId, setStateId] = useState<number | null>(null);
-
-  async function fetchCountries() {
-    const data = await fetchAction("/countries", HttpMethod.GET);
-    setCountries(data as Item[]);
-  }
 
   async function fetchStateByCountry(country: string) {
     const data = await fetchAction(
       `/countries/${country}/states`,
       HttpMethod.GET
     );
-    setStates(data as Item[]);
+    setStates(data.data as Item[]);
+    if (data.error) {
+      toast({
+        description: data.error,
+      });
+    }
   }
 
   function onChangeCountry(id: string) {
     setCountryId(parseInt(id));
+    setStates([]);
+    setStateId(null);
   }
 
   function onChangeState(id: string) {
@@ -37,15 +43,16 @@ export default function CountryForm() {
   }
 
   useEffect(() => {
-    fetchCountries();
-  }, []);
-
-  useEffect(() => {
     if (countryId) {
-      setStates([]);
       fetchStateByCountry(countryId.toString());
     }
   }, [countryId]);
+
+  useEffect(() => {
+    if (error) {
+      console.error(error);
+    }
+  }, [error]);
 
   return (
     <div>
