@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cypress:e2e": "cypress run"
   },
   "dependencies": {
     "@radix-ui/react-select": "^2.0.0",
