@@ -57,19 +57,24 @@ export default function CountryForm({ countries, error }: CountryFormProps) {
   return (
     <div>
       <div className="flex flex-col items-center justify-center gap-y-4">
-        <SelectScrollable
-          items={countries}
-          placeholder="Select a country"
-          onValueChange={onChangeCountry}
-          disabled={countries.length === 0}
-        />
-        <SelectScrollable
-          items={states}
-          placeholder="Select a state"
-          disabled={!countryId || states.length === 0}
-          onValueChange={onChangeState}
-        />
+        <div id="cy-country-select">
+          <SelectScrollable
+            items={countries}
+            placeholder="Select a country"
+            onValueChange={onChangeCountry}
+            disabled={countries.length === 0}
+          />
+        </div>
+        <div id="cy-state-select">
+          <SelectScrollable
+            items={states}
+            placeholder="Select a state"
+            disabled={!countryId || states.length === 0}
+            onValueChange={onChangeState}
+          />
+        </div>
         <Button
+          id="cy-submit-button"
           onClick={() => {
             toast({
               title:
