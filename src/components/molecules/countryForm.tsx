@@ -1,6 +1,6 @@
 "use client";
 
-import { fetchAction } from "@/app/actions/fetchAction";
+import { fetchAction } from "@/actions/fetchAction";
 import { HttpMethod } from "@/constants/HttpMethod";
 import { useEffect, useState } from "react";
 import { Item, SelectScrollable } from "../ui/selectScrollable";
